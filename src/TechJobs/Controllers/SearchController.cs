@@ -20,9 +20,25 @@ namespace TechJobs.Controllers
             ViewBag.columns = ListController.columnChoices;
 
             // if user enters searchTerm, find jobs by searchTerm and pass them into the Views/Search/Index.cshtml view.
-            if (searchTerm != null)
+            if (searchTerm != null && searchType != "all")
+            {
+                ViewBag.jobs = JobData.FindByColumnAndValue(searchType, searchTerm);
+                ViewBag.searchTerm = searchTerm;
+                return View("Index");
+            }
+
+            // If searchTerm box has something && searchType is "all"
+            else if (searchTerm != null)
             {
                 ViewBag.jobs = JobData.FindByValue(searchTerm);
+                ViewBag.searchTerm = searchTerm;
+                return View("Index");
+            }
+
+            // If searchTerm box is empty && searchType is "all"
+            else if (searchTerm == null && searchType == "all")
+            {
+                ViewBag.jobs = JobData.FindAll();
                 ViewBag.searchTerm = searchTerm;
                 return View("Index");
             }
